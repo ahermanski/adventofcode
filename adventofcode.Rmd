@@ -27,7 +27,6 @@ Stern 1
 zahlen <- read_csv("input_tag1.csv", col_names = c("expenses"))
 ```
 
-
 ```{r}
 expand_grid(zahlen, zahlen, .name_repair = "minimal") %>% 
   janitor::clean_names() %>% 
@@ -35,6 +34,7 @@ expand_grid(zahlen, zahlen, .name_repair = "minimal") %>%
   filter(summe == 2020) %>% 
   mutate(product = expenses * expenses_2)
 ```
+
 Stern 2
 
 ```{r}
@@ -80,3 +80,51 @@ input %>%
   mutate(valid = (pos1 != pos2 & (b == pos1 | b == pos2))) %>% 
   filter(valid == TRUE) 
 ```
+
+Türchen 3
+
+```{r}
+input_tag3 <- read_table2("input_tag3.txt", 
+    col_names = c("a"))
+```
+
+Stern 1
+
+```{r}
+input_tag3 %>% 
+  mutate(b = str_dup(a, 32)) %>% 
+  unite(a, b) %>% 
+  mutate(b = str_length(string = a)) %>% 
+  mutate(c = seq(1, 969, 3), c = as.integer(c)) %>% 
+  mutate(d = substring(a, c,c)) %>% 
+  mutate(e = str_count(d, "#")) %>% 
+  summarise(summe = sum(e))
+```
+
+Stern 2
+
+```{r}
+slope <- function(x, y, z) {
+  input_tag3 %>% 
+    mutate(b = str_dup(a, ceiling(nrow(input_tag3)*x/31))) %>% 
+    unite(a, b) %>% 
+    slice(which(row_number() %% y == z)) %>% 
+    mutate(b = str_length(string = a)) %>% 
+    mutate(c = seq(1, ceiling(nrow(input_tag3) / y) * x, x), c = as.integer(c)) %>% 
+    mutate(d = substring(a, c,c)) %>% 
+    mutate(e = str_count(d, "#")) %>% 
+    summarise(summe = sum(e)) %>% 
+    pull(summe)
+}
+```
+
+```{r}
+rows <- tibble(x = c(1, 3, 5, 7, 1), y = c(1, 1, 1, 1, 2), z = c(0, 0, 0, 0, 1))
+
+rows %>% 
+  rowwise() %>% 
+  mutate(Ergebnis = slope(x, y, z)) %>% 
+  tibble() %>% 
+  summarise(Ergebnis = prod(Ergebnis))
+```
+
