@@ -2,18 +2,14 @@
 title: "adventofcode"
 author: "ahermanski"
 date: "1 12 2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r}
 library(tidyverse)
@@ -96,7 +92,7 @@ input_tag3 %>%
   unite(a, b) %>% 
   mutate(b = str_length(string = a)) %>% 
   mutate(c = seq(1, 969, 3), c = as.integer(c)) %>% 
-  mutate(d = substring(a, c,c)) %>% 
+  mutate(d = substring(a, c, c)) %>% 
   mutate(e = str_count(d, "#")) %>% 
   summarise(summe = sum(e))
 ```
@@ -128,3 +124,45 @@ rows %>%
   summarise(Ergebnis = prod(Ergebnis))
 ```
 
+Türchen 4
+
+Stern 1
+
+https://www.reddit.com/r/adventofcode/comments/k6e8sw/2020_day_04_solutions/gel0ikl/
+
+```{r}
+input_tag4 <- tibble(pass = readLines("input_tag4.txt")) 
+```
+
+```{r}
+req <- c("byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid")
+
+gültig <- input_tag4 %>% 
+  mutate(id = cumsum(pass == "")) %>% 
+  filter(pass != "") %>% 
+  group_by(id) %>% 
+  summarise(pass = paste(pass, collapse = " ")) %>% 
+  mutate(pass = str_split(pass, " ")) %>% 
+  unnest(pass) %>% 
+  separate(pass, into = c("schlüssel", "wert"), sep = ":") %>% 
+  group_by(id) %>% 
+  filter(all(req %in% c(schlüssel))) %>% 
+  pivot_wider(names_from = schlüssel, values_from = wert)
+
+gültig
+```
+
+Stern 2
+
+```{r}
+gültig %>% 
+  select(8,2,5, everything()) %>% 
+  mutate(across(ends_with("yr"), as.integer)) %>% 
+  filter(byr >1919 & 2004 > byr, iyr > 2009 & 2021 > iyr, between(eyr, 2020, 2030),
+         (str_detect(hgt, "cm") & between(parse_number(hgt), 150, 193)) | 
+            (str_detect(hgt, "in") & between(parse_number(hgt), 59, 76)),
+         str_detect(hcl, "^#[a-f0-9]{6}$"),
+         ecl %in% c("amb", "blu", "brn", "gry", "grn", "hzl", "oth"),
+         str_detect(pid, "^[0-9]{9}$")) %>% 
+  nrow()
+```
