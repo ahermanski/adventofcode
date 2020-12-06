@@ -77,7 +77,7 @@ input %>%
   filter(valid == TRUE) 
 ```
 
-Türchen 3
+Türchen Nummer 3
 
 ```{r}
 input_tag3 <- read_table2("input_tag3.txt", 
@@ -124,11 +124,13 @@ rows %>%
   summarise(Ergebnis = prod(Ergebnis))
 ```
 
-Türchen 4
+Türchen Nummer 4
 
 Stern 1
 
 https://www.reddit.com/r/adventofcode/comments/k6e8sw/2020_day_04_solutions/gel0ikl/
+
+or https://twitter.com/drob/status/1334729681812267008
 
 ```{r}
 input_tag4 <- tibble(pass = readLines("input_tag4.txt")) 
@@ -166,3 +168,129 @@ gültig %>%
          str_detect(pid, "^[0-9]{9}$")) %>% 
   nrow()
 ```
+
+Türchen Nummer 5
+
+```{r}
+x <- vector(length = 128)
+
+x <- c(0:127)
+
+fancycut(x, buckets = 10)
+
+reihen = 128
+
+x <- c(0:(reihen-1))
+
+[1:64]
+
+
+x[5]
+```
+
+https://www.reddit.com/r/adventofcode/comments/k71h6r/2020_day_05_solutions/geoirl9/
+
+```{r}
+library(readr)
+library(dplyr)
+library(stringr)
+
+read_lines(("input_tag5.txt")) %>%
+  str_replace_all("B|R", "1") %>%
+  str_replace_all("F|L", "0") %>%
+  strtoi(base = 2) %>%
+  as_tibble() %>%
+  summarize(part1 = max(value),
+  part2 = setdiff(min(value):max(value),value))
+```
+
+Türchen Nummer 6
+
+Stern 1
+
+```{r}
+input_tag6 <- tibble(antworten = readLines("input_tag6.txt")) 
+```
+```{r}
+input_tag6 %>% 
+  mutate(gruppe = cumsum(antworten == ""))  %>% 
+  filter(antworten != "") %>% 
+  group_by(gruppe) %>% 
+  summarise(antworten = paste(antworten, collapse = "")) %>% 
+  mutate(antworten = str_split(antworten, "")) %>% 
+  unnest(antworten) %>% 
+  group_by(gruppe) %>% 
+  summarise(antwort = (n_distinct(antworten))) %>% 
+  summarise(antwort = sum(antwort))
+```
+
+Stern 2
+
+Lösung 1 (Die mal funktionierte)
+
+```{r}
+input_tag6 %>% 
+  mutate(gruppe = cumsum(antworten == ""))  %>% 
+  filter(antworten != "") %>% 
+  group_by(gruppe) %>% 
+  mutate(mitglied = row_number()) %>% 
+  group_by(gruppe, mitglied) %>% 
+  mutate(buchstaben = str_split(antworten, "")) %>% 
+  unnest(buchstaben)  %>% 
+  group_by(gruppe, buchstaben) %>% 
+  mutate(count = n()) %>% 
+  group_by(gruppe) %>% 
+  filter(max(mitglied) == count) %>% 
+  group_by(gruppe) %>% 
+  # summarise(gemeinsam = paste(buchstaben, collapse = "")) 
+  mutate(anzahl = n_distinct(buchstaben)) 
+  summarise(anzahl = sum(distinct(anzahl)))
+```
+
+Lösung 2
+
+```{r}
+input_tag6 %>% 
+  mutate(gruppe = cumsum(antworten == ""))  %>% 
+  filter(antworten != "") %>% 
+  group_by(gruppe) %>% 
+  mutate(mitglied = row_number()) %>% 
+  group_by(gruppe, mitglied) %>% 
+  mutate(buchstaben = str_split(antworten, "")) %>% 
+  unnest(buchstaben)  %>% 
+  group_by(gruppe, buchstaben) %>% 
+  mutate(count = n()) %>% 
+  group_by(gruppe) %>% 
+  filter(max(mitglied) == count) %>% 
+  group_by(gruppe, mitglied) %>% 
+  summarise(gemeinsam = paste(buchstaben, collapse = "")) %>% 
+  slice(1) %>% 
+  mutate(anzahl = str_length(gemeinsam)) %>% 
+  ungroup() %>% 
+  summarise(anzahlen = sum(anzahl))
+```
+https://twitter.com/drob/status/1335453278558167040
+
+```{r}
+input <- tibble(x = readLines("input_tag6.txt"))
+
+ input %>% 
+  mutate(group = cumsum(x=="")) %>% 
+  filter(x != "") %>% 
+  add_count(group, name = "group_total") %>% 
+  separate_rows(x, sep = "") %>% 
+  filter(x !="") %>% 
+  distinct(group,x)
+ 
+ 
+  input %>% 
+  mutate(group = cumsum(x=="")) %>% 
+  filter(x != "") %>% 
+  add_count(group, name = "group_total") %>% 
+  separate_rows(x, sep = "") %>% 
+  filter(x !="") %>% 
+  count(group, x, group_total) %>% 
+  filter(n == group_total)
+```
+
+
