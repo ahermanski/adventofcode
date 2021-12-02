@@ -1,0 +1,95 @@
+---
+title: "adventofcode_2019"
+author: "ahermanski"
+date: "1 12 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+
+Tag 1
+
+Stern 1
+```{r}
+input <- c(62259L, 75368L, 93740L, 119724L, 112546L, 137714L, 96999L, 130673L, 102398L, 73819L, 100734L, 85337L, 62764L, 82115L, 127696L, 54391L, 103213L, 77954L, 112513L, 112392L, 138404L, 92989L, 108521L, 83163L, 109720L, 91918L, 114443L, 54306L, 90623L, 66833L, 58505L, 85919L, 77539L, 149419L, 128385L, 66452L, 94677L, 109179L, 62072L, 137245L, 136226L, 145783L, 60689L, 103320L, 145931L, 101286L, 63458L, 122468L, 87858L, 105675L, 146185L, 57417L, 96883L, 70739L, 97494L, 140951L, 149416L, 83137L, 66122L, 134319L, 58511L, 139600L, 102929L, 112240L, 149634L, 64142L, 83332L, 129526L, 99058L, 148889L, 50087L, 74961L, 133606L, 143518L, 68849L, 97045L, 73920L, 61357L, 115941L, 56740L, 111773L, 77880L, 90792L, 77103L, 111355L, 125898L, 56547L, 84918L, 113822L, 74113L, 98557L, 80928L, 60519L, 146379L, 59354L, 102490L, 72584L, 59000L, 63151L, 114253L)
+```
+
+```{r}
+input <- tibble(input)
+
+input %>% 
+  mutate(fuel = floor(input / 3) - 2) %>% 
+  summarise(summe = sum(fuel))
+```
+
+Stern 2
+
+```{r}
+input <- tibble(input)
+
+input %>% 
+  mutate(fuel = floor(input / 3) - 2) %>% 
+  mutate(fuel_2 = floor(fuel / 3) - 2)
+```
+```{r}
+input[1,1] %>% 
+  mutate(fuel = floor(input / 3) - 2) %>% 
+  mutate(fuel_2 = floor(fuel / 3) - 2) 
+
+runif()
+
+
+
+```
+
+
+
+
+```{r}
+name <- function(x) {
+  y <- 1
+  while(y > 0){
+  y = floor(x / 3) - 2
+  print(y)}
+  }
+
+name(100)
+
+i <- 0
+repeat {
+   print(i);
+   i = i+1;
+   if(i > 5) break;
+}
+
+name <- function(x){
+  z=0
+repeat{
+  y = max(floor(x / 3) - 2,0);
+  x=y;
+  z=z+x;
+  if(y ==0) break;
+}
+print(z);  
+}
+
+name(62259)
+```
+
+```{r}
+tib <- tibble(input)
+
+tib %>% 
+  rowwise() %>% 
+  mutate(summe = sum(name(input))) %>% 
+  tibble() %>% 
+  summarise(summe2 = sum(summe))
+```
+

@@ -269,6 +269,7 @@ input_tag6 %>%
   ungroup() %>% 
   summarise(anzahlen = sum(anzahl))
 ```
+
 https://twitter.com/drob/status/1335453278558167040
 
 ```{r}
@@ -293,4 +294,21 @@ input <- tibble(x = readLines("input_tag6.txt"))
   filter(n == group_total)
 ```
 
+Türchen Nummer 9
+
+
+```{r 9}
+input_tag9 <- tibble(zahlen = as.numeric(readLines("input_tag9.txt")))
+```
+
+Stern 1
+
+```{r 9.1}
+input_tag9 %>% 
+  slice(1:26)
+
+combn
+
+slid
+```
 

@@ -1,0 +1,67 @@
+---
+title: "Adven of Code 2021"
+author: "ahermanski"
+date: "1 12 2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+```{r}
+library(tidyverse)
+```
+
+# Day 1
+
+```{r}
+input <- read_csv("input_tag1.txt",col_names = FALSE)
+
+head(input)
+
+input %>% 
+  mutate(test = X1 >= lag(X1, 1)) %>% 
+  summarise(x=sum(test, na.rm = TRUE))
+
+
+sum(input > lag(input),na.rm = TRUE)
+
+sum(input > lag(input, n=3), na.rm = TRUE)
+```
+
+#  Day 2
+
+Stern 1 
+
+```{r}
+input <- read_csv("input_tag2.txt",col_names = c("move"))
+
+input %>% 
+  separate(move, into = c("move", "value"), convert = TRUE) %>% 
+  mutate(h = cumsum((move == "forward") * value)) %>% 
+  mutate(v = cumsum(replace_na(case_when(
+      move == "down" ~ value,
+      move == "up" ~ -value),0))) %>% 
+  slice(1000) %>% 
+  summarise(prod = h*v)
+```
+
+Stern 2
+
+```{r}
+input <- read_csv("input_tag2.txt",col_names = c("move"))
+
+input %>% 
+  separate(move, into = c("move", "value"), convert = TRUE) %>% 
+  mutate(aim = cumsum(replace_na(case_when(
+      move == "down" ~ value,
+      move == "up" ~ -value),0))) %>% 
+  mutate(h = cumsum((move == "forward") * value)) %>% 
+  mutate(d = cumsum(replace_na(case_when(
+    move == "forward" ~ aim * value),0))) %>% 
+  slice(1000) %>% 
+  summarise(prod = h*d)
+
+```
+
+
