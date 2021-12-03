@@ -1,12 +1,11 @@
 ---
-title: "Adven of Code 2021"
+title: "Advent of Code 2021"
 author: "ahermanski"
 date: "1 12 2020"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
-
 
 ```{r}
 library(tidyverse)
@@ -64,4 +63,66 @@ input %>%
 
 ```
 
+```{r}
+vroom::vroom("input_tag3.txt", delim = "", col_names = FALSE)
+```
 
+# Day 3
+
+```{r}
+input <- read_tsv("input_tag3.txt", col_names = FALSE, col_types = "d")
+
+input <- read_csv("input_tag3.txt", col_names = c("bits"))
+
+input %>% 
+  separate(bits, into = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"), sep = "", convert = TRUE) %>% 
+  select(2:13) %>% 
+  summarise_if(is.numeric, funs(round(mean(.),0))) %>% 
+  unite("gamma", 1:12, sep = "") 
+  chartr("10","01", gamma) 
+  tibble() 
+
+  has_rownames()
+  mutate(across(gamma, as.integer))
+
+  
+"1110" -> test
+  chartr("10","01", test)
+```
+
+```{r}
+input %>% 
+  slice(10) %>% 
+  strtoi()
+```
+
+```{r}
+read.fwf("input_tag3.txt", widths = rep(1,12)) %>% 
+  summarise_if(is.numeric, funs(round(mean(.),0))) %>% 
+  unite("gamma", 1:12, sep = "") %>% 
+  mutate(epsilon = chartr("10","01", gamma))
+       strtoi()
+```
+
+```{r}
+str_split(input, "") %>% 
+  map(as.integer) %>% 
+    do.call(rbind, .)
+```
+
+```{r}
+vroom::vroom()
+```
+
+```{r}
+read_csv("input_tag3.txt", col_names = "binary") %>% 
+  separate(binary, into = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"), sep = 1:12, convert = TRUE) %>% 
+  summarise_if(is.integer, funs(round(mean(.),0))) %>% 
+  unite("gamma", 1:12, sep = "") %>% 
+  mutate(epsilon = chartr("10","01", gamma)) %>% 
+  strtoi(base = 2) %>% 
+  tibble() %>% 
+  cumprod() %>% slice(2)
+
+
+```
